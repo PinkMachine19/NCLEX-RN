@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture — NCLEX-RN Prep</title><link rel="stylesheet" href="../styles.css" /></head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="brand">🩺 NCLEX-RN Prep</a>
+    <a href="../syllabus/index.html">Syllabus</a>
+    <a href="../sessions/index.html">Sessions</a>
+    <a href="../quizzes/index.html">Quizzes</a>
+    <a href="../labs/index.html">Labs</a>
+    <a href="../architecture/index.html" class="active">Architecture</a>
+    <a href="../session-notes/index.html">Notes</a>
+    <a href="../commit-reviews/index.html">Commits</a>
+    <a href="../prompts/index.html">Prompts</a>
+  </div>
+</nav>
+<main><div class="container">
+    <h1>Architecture Decisions</h1>
+    <p class="subtitle">Structural decisions documented with reasoning — cloned from react-learn-with-ai philosophy.</p>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+        <span class="card-title">ADR-001 — Plain JavaScript (no TypeScript)</span>
+        <span class="badge badge-layer">Pre-curriculum</span>
+      </div>
+      <p><strong>Decision:</strong> Plain JavaScript throughout. No TypeScript.</p>
+      <p><strong>Why:</strong> Same rationale as source project — one mental model at a time. Type errors distract from clinical content.</p>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+        <span class="card-title">ADR-002 — Static HTML docs (no build step)</span>
+        <span class="badge badge-layer">Pre-curriculum</span>
+      </div>
+      <p><strong>Decision:</strong> Documentation is static HTML with shared styles.css.</p>
+      <p><strong>Why:</strong> Zero dependencies. Openable anywhere. AI sessions read source directly.</p>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+        <span class="card-title">ADR-003 — Domain migration from react-learn-with-ai</span>
+        <span class="badge badge-layer">Pre-curriculum</span>
+      </div>
+      <p><strong>Decision:</strong> Replicate exact folder structure, session flow, quiz engine, and progression gates from react-learn-with-ai. Only educational domain changes.</p>
+      <p><strong>Why:</strong> Proven learning platform architecture. NCLEX-RN content swaps into existing patterns without redesign.</p>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+        <span class="card-title">ADR-004 — Mock patient data before live integrations</span>
+        <span class="badge badge-layer">Pre-curriculum</span>
+      </div>
+      <p><strong>Decision:</strong> Patient cases live in /src/mock/ and /src/study/. No EHR integration until later modules.</p>
+      <p><strong>Why:</strong> Same mock-first philosophy as source project. Study independently of external systems.</p>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
+        <span class="card-title">ADR-005 — 10 modules × 4 sessions = 40 session curriculum</span>
+        <span class="badge badge-layer">Pre-curriculum</span>
+      </div>
+      <p><strong>Decision:</strong> Mirror 40-session structure. 10 NCLEX domains with 4 sessions each. Gate quiz at session 4, 8, 12, etc.</p>
+      <p><strong>Why:</strong> Preserves progression checkpoint rhythm from source project.</p>
+    </div>
+</div></main></body></html>

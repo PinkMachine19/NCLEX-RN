@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Session 23 — Pulmonary Embolism & Respiratory Failure</title>
+  <link rel="stylesheet" href="../../styles.css" />
+  <style>
+    .quiz-option {
+      display: block;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    .quiz-option:hover { border-color: var(--accent); background: var(--surface); }
+    .quiz-option.selected { border-color: var(--accent); background: rgba(88,166,255,0.1); }
+    .quiz-option.correct  { border-color: var(--green);  background: rgba(63,185,80,0.1); }
+    .quiz-option.wrong    { border-color: var(--red);    background: rgba(248,81,73,0.1); }
+    .quiz-question { margin-bottom: 28px; }
+    .quiz-question p { font-weight: 600; margin-bottom: 10px; font-size: 15px; }
+    .quiz-question .question-num { color: var(--text-muted); font-size: 12px; font-weight: 400; margin-bottom: 4px; }
+    .quiz-result {
+      display: none;
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      margin-top: 16px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .quiz-result.pass { background: rgba(63,185,80,0.12); border: 1px solid var(--green); color: var(--green); }
+    .quiz-result.fail { background: rgba(248,81,73,0.12); border: 1px solid var(--red);   color: var(--red); }
+    .explanation {
+      display: none;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      padding: 8px 12px;
+      background: var(--surface-2);
+      border-radius: var(--radius);
+      border-left: 2px solid var(--border);
+    }
+    .submit-btn {
+      background: var(--accent);
+      color: #0d1117;
+      border: none;
+      border-radius: var(--radius);
+      padding: 10px 22px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.15s;
+    }
+    .submit-btn:hover { opacity: 0.85; }
+    .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .step { display: flex; gap: 16px; margin-bottom: 20px; }
+    .step-num {
+      flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--accent); color: #0d1117; font-weight: 700; font-size: 13px;
+      display: flex; align-items: center; justify-content: center; margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .step-body p { margin-bottom: 6px; }
+    .section-divider { border: none; border-top: 2px solid var(--border); margin: 40px 0; }
+    .checklist-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 14px; }
+    .checklist-item input[type="checkbox"] { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--accent); flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="../../index.html" class="brand">🩺 NCLEX-RN Prep</a>
+    <a href="../../syllabus/index.html">Syllabus</a>
+    <a href="../../sessions/index.html" class="active">Sessions</a>
+    <a href="../../quizzes/index.html">Quizzes</a>
+    <a href="../../labs/index.html">Labs</a>
+    <a href="../../architecture/index.html">Architecture</a>
+    <a href="../../session-notes/index.html">Notes</a>
+    <a href="../../commit-reviews/index.html">Commits</a>
+    <a href="../../prompts/index.html">Prompts</a>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px;">
+      <span class="badge badge-layer">Module 6</span>
+      <span class="badge badge-locked">Session 23</span>
+      <span style="color:var(--text-muted); font-size:13px;">Respiratory System</span>
+    </div>
+    <h1>Pulmonary Embolism & Respiratory Failure</h1>
+    <p class="subtitle">
+      PE signs, anticoagulation, intubation indicators. This session is part of Module 6: Respiratory System.
+      Complete the pre-quiz, study the concepts, complete the study session, commit, and pass the post-quiz.
+    </p>
+
+    <div class="alert alert-info">
+      Estimated time: 35–40 minutes &nbsp;·&nbsp;
+      Pre-quiz → Concept → Study Session → Commit → Post-quiz
+    </div>
+
+    <h2>1. Learning Objective</h2>
+    <div class="card">
+      <p>By the end of this session you will be able to:</p>
+      <ul>
+        <li>Explain the core clinical concepts of Pulmonary Embolism & Respiratory Failure</li><li>Apply respiratory system knowledge to NCLEX-style scenarios</li><li>Identify priority nursing interventions using clinical reasoning</li><li>Demonstrate understanding through practice questions and study exercises</li><li>Connect this session's content to the broader Respiratory System module</li>
+      </ul>
+    </div>
+
+    <h2>2. Pre-Study Quiz</h2>
+    <p>
+      Answer these <strong>before</strong> reading the concept explanation or starting the study session.
+      Score honestly. You need 4/5 (80%) to proceed.
+    </p>
+    <div id="pre-quiz">
+      <div class="quiz-question" data-question="0" data-answer="b">
+        <div class="question-num">Question 1 of 5</div>
+        <p>Regarding pulmonary embolism & respiratory failure, which nursing action demonstrates clinical reasoning rather than memorization?</p>
+        <label class="quiz-option" data-val="a">Selecting an intervention based solely on the diagnosis label</label>
+        <label class="quiz-option" data-val="b">Assessing the patient first, then matching intervention to findings</label>
+        <label class="quiz-option" data-val="c">Delegating all care without assessment</label>
+        <label class="quiz-option" data-val="d">Waiting for the physician before any action</label>
+        <div class="explanation">NCLEX tests application. Assessment before intervention is the nursing process foundation for Pulmonary Embolism & Respiratory Failure.</div>
+      </div>
+      <div class="quiz-question" data-question="1" data-answer="b">
+        <div class="question-num">Question 2 of 5</div>
+        <p>A stable patient on the unit develops new findings related to respiratory system. What is the nurse's first priority?</p>
+        <label class="quiz-option" data-val="a">Document and continue routine care</label>
+        <label class="quiz-option" data-val="b">Assess airway, breathing, and circulation</label>
+        <label class="quiz-option" data-val="c">Call family</label>
+        <label class="quiz-option" data-val="d">Prepare discharge paperwork</label>
+        <div class="explanation">ABCs always come first in prioritization, regardless of clinical specialty.</div>
+      </div>
+      <div class="quiz-question" data-question="2" data-answer="b">
+        <div class="question-num">Question 3 of 5</div>
+        <p>When studying Pulmonary Embolism & Respiratory Failure, which approach best prepares for NCLEX-style questions?</p>
+        <label class="quiz-option" data-val="a">Memorizing lists without understanding rationale</label>
+        <label class="quiz-option" data-val="b">Understanding why each intervention is chosen</label>
+        <label class="quiz-option" data-val="c">Skipping practice questions</label>
+        <label class="quiz-option" data-val="d">Focusing only on one answer format</label>
+        <div class="explanation">NCLEX rewards understanding of rationale, not rote memorization.</div>
+      </div>
+      <div class="quiz-question" data-question="3" data-answer="b">
+        <div class="question-num">Question 4 of 5</div>
+        <p>In a scenario combining respiratory system knowledge, the nurse must delegate a task. Which task is appropriate for unlicensed assistive personnel (UAP)?</p>
+        <label class="quiz-option" data-val="a">Assessing a new symptom</label>
+        <label class="quiz-option" data-val="b">Ambulating a stable patient per care plan</label>
+        <label class="quiz-option" data-val="c">Teaching a new medication</label>
+        <label class="quiz-option" data-val="d">Interpreting lab results</label>
+        <div class="explanation">UAP may perform routine, non-assessment tasks on stable patients per care plan. Assessment and teaching remain RN scope.</div>
+      </div>
+      <div class="quiz-question" data-question="4" data-answer="b">
+        <div class="question-num">Question 5 of 5</div>
+        <p>After completing this session on pulmonary embolism & respiratory failure, a post-quiz score below 80% means:</p>
+        <label class="quiz-option" data-val="a">Proceed to the next session anyway</label>
+        <label class="quiz-option" data-val="b">Repeat the session until mastery is demonstrated</label>
+        <label class="quiz-option" data-val="c">Skip the lab portion</label>
+        <label class="quiz-option" data-val="d">Only review the wrong answers briefly</label>
+        <div class="explanation">The curriculum requires ≥80% (4/5) on quizzes before advancing — same rule as the source platform.</div>
+      </div>
+      <button class="submit-btn" disabled>Submit Pre-Quiz</button>
+      <div class="quiz-result" id="pre-result"></div>
+    </div>
+
+    <hr class="section-divider" />
+
+    <h2>3. The Concept — Pulmonary Embolism & Respiratory Failure</h2>
+    
+    <h3>Clinical Foundation — Pulmonary Embolism & Respiratory Failure</h3>
+    <p>
+      This session covers <strong>PE signs, anticoagulation, intubation indicators</strong>. NCLEX-RN questions in the Respiratory System domain
+      test whether you can apply nursing knowledge to patient scenarios — not whether you can recite definitions.
+    </p>
+    <p>
+      Registered nurses must integrate assessment findings, evidence-based interventions, and safety protocols.
+      Every question on the NCLEX expects you to think like a nurse at the bedside: assess first, prioritize by
+      acuity, intervene safely, and evaluate outcomes.
+    </p>
+
+    <h3>Key Concepts for This Session</h3>
+    <ul>
+      <li><strong>Core focus:</strong> PE signs, anticoagulation, intubation indicators</li>
+      <li><strong>Module context:</strong> Respiratory System — Module 6 of 10</li>
+      <li><strong>NCLEX category:</strong> Safe and Effective Care Environment / Physiological Integrity</li>
+      <li><strong>Study milestone:</strong> Map respiratory decline to nursing actions</li>
+    </ul>
+
+    <div class="alert alert-warning">
+      <strong>NCLEX testing tip:</strong> When two answers seem correct, choose the one that addresses
+      the most acute patient need first. Use ABCs (Airway, Breathing, Circulation) and Maslow's hierarchy
+      as your prioritization framework.
+    </div>
+
+    <h3>Clinical Application</h3>
+    <p>
+      In practice, pulmonary embolism & respiratory failure requires the nurse to gather data, recognize patterns, and select
+      interventions that prevent harm. On the NCLEX, distractors often include actions that are correct
+      in isolation but wrong for the specific scenario — always read the question stem carefully for
+      keywords like "first," "priority," "best," and "initial."
+    </p>
+
+    <pre><code>// Patient case data structure used throughout this platform
+const patientCase = {
+  id: "PT-0023",
+  module: "Respiratory System",
+  session: 23,
+  chiefComplaint: "...",
+  vitalSigns: { hr: 0, bp: "0/0", rr: 0, temp: 0, spo2: 0 },
+  assessment: { /* findings */ },
+  priorityInterventions: [ /* ordered list */ ]
+};</code></pre>
+
+    <h3>Connection to NCLEX-RN Exam</h3>
+    <p>
+      Questions related to respiratory system appear frequently on the NCLEX-RN. Mastery of pulmonary embolism & respiratory failure
+      builds the clinical reasoning foundation needed for both standalone questions and case studies with
+      6–10 follow-up questions in the new Next Generation NCLEX (NGN) format.
+    </p>
+
+
+    <hr class="section-divider" />
+
+    <h2>4. Study Session</h2>
+    <div class="alert alert-success">
+      <strong>Study session objective:</strong> Map respiratory decline to nursing actions
+    </div>
+    <h3>Step-by-step instructions</h3>
+    
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p><strong>Create the study file</strong></p>
+        <p>Create <code>src/study/module-06-session-23.js</code> in your editor.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p><strong>Define the patient case</strong></p>
+        <p>Write a patient scenario related to Pulmonary Embolism & Respiratory Failure. Include at least 5 clinical data points.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <p><strong>Document vital signs</strong></p>
+        <p>Add a vitalSigns object with hr, bp, rr, temp, and spo2 values appropriate to the scenario.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <p><strong>List assessment findings</strong></p>
+        <p>Document subjective and objective findings that support your clinical reasoning.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <p><strong>Identify priority interventions</strong></p>
+        <p>List 3 nursing interventions in priority order with rationale for each.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <p><strong>Log your reasoning</strong></p>
+        <p>Add console.log statements that output your priority intervention and why it comes first.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <p><strong>Self-check</strong></p>
+        <p>Review your case against the concept section. Can you defend every data point clinically?</p>
+      </div>
+    </div>
+
+    <hr class="section-divider" />
+
+    <h2>5. Expected Files Changed</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>File</th><th>Action</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>src/study/module-06-session-23.js</code></td>
+            <td>Created or Updated</td>
+            <td>Patient case / study exercise for this session.</td>
+          </tr>
+          <tr>
+            <td><code>docs/sessions/session-23/index.html</code></td>
+            <td>Reference</td>
+            <td>This session document.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="section-divider" />
+
+    <h2>6. Commit Checkpoint</h2>
+    <p>Once the study session is complete and you can explain every clinical decision, make this commit:</p>
+    <pre><code>git add src/study/module-06-session-23.js docs/sessions/session-23/index.html
+git commit -m "session-23: pulmonary embolism & respiratory failure — study session complete"</code></pre>
+
+    <hr class="section-divider" />
+
+    <h2>7. Code Review Checklist</h2>
+    <div class="card">
+      <div class="checklist-item"><input type="checkbox" id="c1" /><label for="c1">Patient case includes realistic vital signs for the scenario</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c2" /><label for="c2">Assessment findings support the priority interventions chosen</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c3" /><label for="c3">Interventions are listed in priority order (most acute first)</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c4" /><label for="c4">I can explain the clinical rationale for each intervention</label></div>
+      <div class="checklist-item"><input type="checkbox" id="c5" /><label for="c5">Study file runs without errors in Node or browser console</label></div>
+    </div>
+
+    <hr class="section-divider" />
+
+    <h2>8. Post-Study Quiz</h2>
+    <p>Same 5 questions. Take again after completing the study session. Need 4/5 to mark complete.</p>
+    <div id="post-quiz">
+      <div class="quiz-question" data-question="0" data-answer="b">
+        <div class="question-num">Question 1 of 5</div>
+        <p>Regarding pulmonary embolism & respiratory failure, which nursing action demonstrates clinical reasoning rather than memorization?</p>
+        <label class="quiz-option" data-val="a">Selecting an intervention based solely on the diagnosis label</label>
+        <label class="quiz-option" data-val="b">Assessing the patient first, then matching intervention to findings</label>
+        <label class="quiz-option" data-val="c">Delegating all care without assessment</label>
+        <label class="quiz-option" data-val="d">Waiting for the physician before any action</label>
+        <div class="explanation">NCLEX tests application. Assessment before intervention is the nursing process foundation for Pulmonary Embolism & Respiratory Failure.</div>
+      </div>
+      <div class="quiz-question" data-question="1" data-answer="b">
+        <div class="question-num">Question 2 of 5</div>
+        <p>A stable patient on the unit develops new findings related to respiratory system. What is the nurse's first priority?</p>
+        <label class="quiz-option" data-val="a">Document and continue routine care</label>
+        <label class="quiz-option" data-val="b">Assess airway, breathing, and circulation</label>
+        <label class="quiz-option" data-val="c">Call family</label>
+        <label class="quiz-option" data-val="d">Prepare discharge paperwork</label>
+        <div class="explanation">ABCs always come first in prioritization, regardless of clinical specialty.</div>
+      </div>
+      <div class="quiz-question" data-question="2" data-answer="b">
+        <div class="question-num">Question 3 of 5</div>
+        <p>When studying Pulmonary Embolism & Respiratory Failure, which approach best prepares for NCLEX-style questions?</p>
+        <label class="quiz-option" data-val="a">Memorizing lists without understanding rationale</label>
+        <label class="quiz-option" data-val="b">Understanding why each intervention is chosen</label>
+        <label class="quiz-option" data-val="c">Skipping practice questions</label>
+        <label class="quiz-option" data-val="d">Focusing only on one answer format</label>
+        <div class="explanation">NCLEX rewards understanding of rationale, not rote memorization.</div>
+      </div>
+      <div class="quiz-question" data-question="3" data-answer="b">
+        <div class="question-num">Question 4 of 5</div>
+        <p>In a scenario combining respiratory system knowledge, the nurse must delegate a task. Which task is appropriate for unlicensed assistive personnel (UAP)?</p>
+        <label class="quiz-option" data-val="a">Assessing a new symptom</label>
+        <label class="quiz-option" data-val="b">Ambulating a stable patient per care plan</label>
+        <label class="quiz-option" data-val="c">Teaching a new medication</label>
+        <label class="quiz-option" data-val="d">Interpreting lab results</label>
+        <div class="explanation">UAP may perform routine, non-assessment tasks on stable patients per care plan. Assessment and teaching remain RN scope.</div>
+      </div>
+      <div class="quiz-question" data-question="4" data-answer="b">
+        <div class="question-num">Question 5 of 5</div>
+        <p>After completing this session on pulmonary embolism & respiratory failure, a post-quiz score below 80% means:</p>
+        <label class="quiz-option" data-val="a">Proceed to the next session anyway</label>
+        <label class="quiz-option" data-val="b">Repeat the session until mastery is demonstrated</label>
+        <label class="quiz-option" data-val="c">Skip the lab portion</label>
+        <label class="quiz-option" data-val="d">Only review the wrong answers briefly</label>
+        <div class="explanation">The curriculum requires ≥80% (4/5) on quizzes before advancing — same rule as the source platform.</div>
+      </div>
+      <button class="submit-btn" disabled>Submit Post-Quiz</button>
+      <div class="quiz-result" id="post-result"></div>
+    </div>
+
+    <hr class="section-divider" />
+
+    <h2>9. Reflection Questions</h2>
+    <div class="card">
+      <ol>
+        <li>Which concept in this session was most challenging? Why?</li>
+        <li>How would you apply pulmonary embolism & respiratory failure knowledge if you had two patients with competing needs?</li>
+        <li>What NCLEX-style distractors might trick you on this topic?</li>
+        <li>What would you do differently in clinical practice based on today's study?</li>
+      </ol>
+    </div>
+
+    <hr class="section-divider" />
+
+    <h2>10. What Breaks If This Knowledge Is Missing?</h2>
+    <div class="card">
+      <ul>
+        <li><strong>Patient safety:</strong> Gaps in respiratory system knowledge directly impact patient outcomes on the NCLEX and at the bedside.</li>
+        <li><strong>Prioritization errors:</strong> Without pulmonary embolism & respiratory failure mastery, you may select interventions that are correct but not the priority action.</li>
+        <li><strong>Module progression:</strong> Later sessions in Respiratory System build on this content. Skipping mastery here compounds errors downstream.</li>
+      </ul>
+    </div>
+
+    <hr class="section-divider" />
+
+    <h2>11. What We Learned</h2>
+    <div class="card" style="border-color: var(--green);">
+      <p><strong>Clinical concept mastered:</strong> Pulmonary Embolism & Respiratory Failure — PE signs, anticoagulation, intubation indicators</p>
+      <p><strong>Module progress:</strong> Session 23 of 4 in Module 6: Respiratory System</p>
+      <p><strong>Next session:</strong> <a href="../../sessions/session-24/index.html">Session 24 — Module 6 Gate — Respiratory Integration</a></p>
+    </div>
+
+  </div>
+</main>
+
+
+<script>
+  function setupQuiz(prefix) {
+    const container = document.getElementById(prefix + '-quiz');
+    if (!container) return;
+    const questions = container.querySelectorAll('.quiz-question');
+    const btn = container.querySelector('.submit-btn');
+    let answeredCount = 0;
+    let correct = 0;
+    questions.forEach(q => {
+      q.querySelectorAll('.quiz-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          if (q.dataset.answered) return;
+          q.dataset.answered = 'true';
+          answeredCount++;
+          const answer = q.dataset.answer;
+          q.querySelectorAll('.quiz-option').forEach(o => {
+            o.style.pointerEvents = 'none';
+            if (o.dataset.val === answer) o.classList.add('correct');
+          });
+          if (opt.dataset.val === answer) { correct++; } else { opt.classList.add('wrong'); }
+          const explanation = q.querySelector('.explanation');
+          if (explanation) explanation.style.display = 'block';
+          if (answeredCount === questions.length) btn.disabled = false;
+        });
+      });
+    });
+    btn.addEventListener('click', () => {
+      const result = document.getElementById(prefix + '-result');
+      const pct = Math.round((correct / questions.length) * 100);
+      result.style.display = 'block';
+      btn.disabled = true;
+      if (correct >= 4) {
+        result.className = 'quiz-result pass';
+        result.innerHTML = correct + '/5 correct (' + pct + '%) — Passed. ' +
+          (prefix === 'pre' ? 'You may proceed to the study session.' : 'Session complete. Make your commit.');
+      } else {
+        result.className = 'quiz-result fail';
+        result.innerHTML = correct + '/5 correct (' + pct + '%) — Below 80%. ' +
+          (prefix === 'pre' ? 'Read the concept section carefully, then retake.' :
+           'Re-read the concept section and redo the study session before committing.');
+      }
+    });
+  }
+  setupQuiz('pre');
+  setupQuiz('post');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NCLEX-RN Exam Preparation Platform</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="index.html" class="brand">🩺 NCLEX-RN Prep</a>
+    <a href="syllabus/index.html">Syllabus</a>
+    <a href="sessions/index.html">Sessions</a>
+    <a href="quizzes/index.html">Quizzes</a>
+    <a href="labs/index.html">Labs</a>
+    <a href="architecture/index.html">Architecture</a>
+    <a href="session-notes/index.html">Notes</a>
+    <a href="commit-reviews/index.html">Commits</a>
+    <a href="prompts/index.html">Prompts</a>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+
+    <h1>NCLEX-RN Exam Preparation Platform</h1>
+    <p class="subtitle">
+      A structured, documentation-first NCLEX-RN exam preparation curriculum for nursing students
+      who want to understand clinical reasoning deeply — not just memorize answer banks.
+    </p>
+
+    <div class="card">
+      <div class="card-title">Overall Progress</div>
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span>Sessions completed</span>
+          <span id="progress-text">0 / 40</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar" style="width: 0%"></div>
+        </div>
+      </div>
+      <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;">
+        <span class="badge badge-complete">Complete: 0</span>
+        <span class="badge badge-current">Active: Session 01</span>
+        <span class="badge badge-locked">Locked: 39</span>
+      </div>
+    </div>
+
+    <div class="alert alert-info" style="margin-bottom: 32px;">
+      <strong>Active session:</strong>
+      <a href="sessions/session-01/index.html">Session 01 — Standard Precautions &amp; Hand Hygiene</a>
+      &nbsp;·&nbsp; Module 1: Infection Control &amp; Safety
+    </div>
+
+    <h2>Documentation Sections</h2>
+    <div class="nav-grid">
+      <a class="nav-card" href="syllabus/index.html"><div class="nav-card-title">Syllabus</div><div class="nav-card-desc">All 40 sessions, module breakdown, unlock gates, and dependency ordering.</div></a>
+      <a class="nav-card" href="sessions/index.html"><div class="nav-card-title">Sessions</div><div class="nav-card-desc">Individual lesson docs — objectives, quizzes, study sessions, and commit checkpoints.</div></a>
+      <a class="nav-card" href="quizzes/index.html"><div class="nav-card-title">Quizzes</div><div class="nav-card-desc">Quiz bank and score tracker. Must score 80% to advance each module.</div></a>
+      <a class="nav-card" href="labs/index.html"><div class="nav-card-title">Study Sessions</div><div class="nav-card-desc">Study session reference index. Step-by-step exercises per session.</div></a>
+      <a class="nav-card" href="architecture/index.html"><div class="nav-card-title">Architecture</div><div class="nav-card-desc">Architecture decision log. Every structural choice documented here.</div></a>
+      <a class="nav-card" href="session-notes/index.html"><div class="nav-card-title">Session Notes</div><div class="nav-card-desc">Running notes from each session. Questions raised and answered.</div></a>
+      <a class="nav-card" href="commit-reviews/index.html"><div class="nav-card-title">Commit Reviews</div><div class="nav-card-desc">Every commit reviewed here before moving forward.</div></a>
+      <a class="nav-card" href="prompts/index.html"><div class="nav-card-title">Prompt Log</div><div class="nav-card-desc">Every prompt sent to the AI in this project, logged in order.</div></a>
+    </div>
+
+    <h2>Curriculum Modules</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Module</th><th>Topic</th><th>Sessions</th><th>Status</th><th>Unlock Condition</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-layer">1</span></td>
+            <td>Infection Control & Safety</td>
+            <td>01 – 04</td>
+            <td><span class="badge badge-current">Active</span></td>
+            <td>None — starting point</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-layer">2</span></td>
+            <td>Emergency Response</td>
+            <td>05 – 08</td>
+            <td><span class="badge badge-locked">Locked</span></td>
+            <td>Session 04 quiz ≥ 80%</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-layer">3</span></td>
+            <td>Pharmacology</td>
+            <td>09 – 12</td>
+            <td><span class="badge badge-locked">Locked</span></td>
+            <td>Session 08 quiz ≥ 80%</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-layer">4</span></td>
+            <td>Patient Prioritization</td>
+            <td>13 – 16</td>
+            <td><span class="badge badge-locked">Locked</span></td>
+            <td>Session 12 quiz ≥ 80%</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-layer">5</span></td>
+            <td>Cardiovascular System</td>
+            <td>17 – 20</td>
+            <td><span class="badge badge-locked">Locked</span></td>
+            <td>Session 16 quiz ≥ 80%</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-layer">6</span></td>
+            <td>Respiratory System</td>
+            <td>21 – 24</td>
+            <td><span class="badge badge-locked">Locked</span></td>
+            <td>Session 20 quiz ≥ 80%</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-layer">7</span></td>
+            <td>Diabetes / Endocrine</td>
+            <td>25 – 28</td>
+            <td><span class="badge badge-locked">Locked</span></td>
+            <td>Session 24 quiz ≥ 80%</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-layer">8</span></td>
+            <td>Pediatrics</td>
+            <td>29 – 32</td>
+            <td><span class="badge badge-locked">Locked</span></td>
+            <td>Session 28 quiz ≥ 80%</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-layer">9</span></td>
+            <td>Pregnancy / Maternity</td>
+            <td>33 – 36</td>
+            <td><span class="badge badge-locked">Locked</span></td>
+            <td>Session 32 quiz ≥ 80%</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-layer">10</span></td>
+            <td>Mental Health / Psychiatric Nursing</td>
+            <td>37 – 40</td>
+            <td><span class="badge badge-locked">Locked</span></td>
+            <td>Session 36 quiz ≥ 80%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Rules We Follow</h2>
+    <div class="card">
+      <ol>
+        <li>Never jump ahead — clinical concepts taught in strict dependency order.</li>
+        <li>One session = one focused topic = one commit.</li>
+        <li>Always assess before intervening — nursing process first.</li>
+        <li>Score below 80% on a quiz = repeat the session.</li>
+        <li>Every study session ends with documentation updates.</li>
+        <li>Understand every commit before proceeding.</li>
+        <li>Practice questions test clinical reasoning, not memorization.</li>
+        <li>Every lesson completable in 35–40 minutes.</li>
+      </ol>
+    </div>
+
+    <p class="subtitle" style="margin-top: 32px;">
+      Package manager: <code>npm</code> &nbsp;·&nbsp;
+      Framework: <code>React + Vite</code> &nbsp;·&nbsp;
+      Testing: <code>Vitest + React Testing Library</code> &nbsp;·&nbsp;
+      Language: <code>JavaScript (no TypeScript)</code>
+    </p>
+
+  </div>
+</main>
+</body>
+</html>
