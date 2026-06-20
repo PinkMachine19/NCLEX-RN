@@ -41,3 +41,10 @@ coverage/
 
 # Vite
 *.local
+
+# TikTok quizzes — generated locally, deployed via D:\apps\uploads (not in repo)
+tik-tok quizes/
+
+# Python
+__pycache__/
+*.pyc

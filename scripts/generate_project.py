@@ -2,7 +2,13 @@
 """Generate NCLEX-RN project docs — mirrors react-learn-with-ai architecture."""
 
 import os
+import sys
 from pathlib import Path
+
+_SCRIPTS = Path(__file__).resolve().parent
+if str(_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS))
+from hydrated_module1 import HYDRATED_CONCEPT, HYDRATED_STEPS, STUDY_FILE_CONTENT
 
 ROOT = Path(r"D:\repos\source\NCLEX-RN")
 
@@ -147,6 +153,40 @@ QUIZ_DATA = {
         ("Which patient requires the most restrictive isolation?",
          [("a", "Influenza"), ("b", "MRSA colonization"), ("c", "Active measles"), ("d", "C. difficile")],
          "c", "Measles is airborne; requires negative-pressure room and N95. Influenza is droplet; MRSA and C. diff are contact."),
+    ],
+    3: [
+        ("What is the correct order for donning PPE?",
+         [("a", "Gloves → Gown → Mask → Eye protection"), ("b", "Gown → Mask/Eye protection → Gloves"), ("c", "Mask → Gloves → Gown"), ("d", "Eye protection → Gloves → Gown")],
+         "b", "Don gown first, then mask/eye protection, then gloves — gloves go on last."),
+        ("When doffing PPE, which item should be removed FIRST?",
+         [("a", "Gloves"), ("b", "Gown"), ("c", "Mask"), ("d", "Eye protection")],
+         "a", "Gloves are removed first during doffing to minimize contamination of hands and clothing."),
+        ("An N95 respirator is required for which scenario?",
+         [("a", "C. difficile contact precautions"), ("b", "Influenza droplet precautions"), ("c", "Airborne isolation for varicella"), ("d", "Standard precautions only")],
+         "c", "Varicella (chickenpox) requires airborne precautions with N95 or higher-level respirator."),
+        ("After doffing all PPE, the nurse's next action is:",
+         [("a", "Document in the chart"), ("b", "Perform hand hygiene"), ("c", "Re-don gloves immediately"), ("d", "Leave the room without washing")],
+         "b", "Hand hygiene is always performed immediately after removing PPE, before any other action."),
+        ("Which PPE error most increases self-contamination risk during doffing?",
+         [("a", "Removing gloves before gown"), ("b", "Rolling gown away from body while removing"), ("c", "Touching the outside of the mask while removing"), ("d", "Performing hand hygiene after doffing")],
+         "c", "Touching the contaminated outer surface of the mask during removal spreads organisms to hands."),
+    ],
+    4: [
+        ("A nurse enters an isolation room without checking the precaution sign. What is the priority nursing action?",
+         [("a", "Proceed — standard precautions cover everything"), ("b", "Exit, verify precaution type, don appropriate PPE, re-enter"), ("c", "Ask the patient what illness they have"), ("d", "Call the physician for orders")],
+         "b", "Always verify isolation type on the door sign and don correct PPE before patient contact."),
+        ("Which patient should the nurse see FIRST?",
+         [("a", "Stable post-op patient requesting pain medication"), ("b", "Patient with new onset shortness of breath and SpO2 88%"), ("c", "Patient due for routine morning medications"), ("d", "Patient requesting discharge teaching")],
+         "b", "Airway and breathing problems take priority — SpO2 88% with dyspnea is the most acute."),
+        ("A used needle is found in the bed linens. The nurse should:",
+         [("a", "Dispose in regular trash"), ("b", "Recap the needle and discard in sharps container"), ("c", "Use tongs/forceps to place in sharps container without recapping"), ("d", "Leave it for environmental services")],
+         "c", "Never recap needles. Use mechanical device or forceps to place directly in sharps container."),
+        ("Standard precautions include treating which substances as potentially infectious?",
+         [("a", "Blood and body fluids only"), ("b", "All body fluids except sweat"), ("c", "Blood, all body fluids, mucous membranes, and non-intact skin"), ("d", "Only visible blood")],
+         "c", "Standard precautions apply to blood, all body fluids, mucous membranes, and non-intact skin."),
+        ("A student nurse asks why hand hygiene matters when wearing gloves. The best response is:",
+         [("a", "Gloves make hand hygiene unnecessary"), ("b", "Gloves can have micro-tears; hand hygiene protects before and after glove use"), ("c", "Hand hygiene is only for the nurse's comfort"), ("d", "Hand hygiene replaces PPE entirely")],
+         "b", "Gloves are not perfect barriers. Hand hygiene before donning and after removing gloves prevents cross-contamination."),
     ],
 }
 
@@ -365,7 +405,9 @@ def generate_session(session_num):
         f"Connect this session's content to the broader {mod_name} module",
     ]
 
-    concept_paragraphs = f"""
+    concept_paragraphs = HYDRATED_CONCEPT.get(session_num)
+    if not concept_paragraphs:
+        concept_paragraphs = f"""
     <h3>Clinical Foundation — {title}</h3>
     <p>
       This session covers <strong>{concept}</strong>. NCLEX-RN questions in the {mod_name} domain
@@ -418,7 +460,7 @@ const patientCase = {{
     </p>
 """
 
-    steps = [
+    step_list = HYDRATED_STEPS.get(session_num) or [
         ("Create the study file", f"Create <code>{lab_file}</code> in your editor."),
         ("Define the patient case", f"Write a patient scenario related to {title}. Include at least 5 clinical data points."),
         ("Document vital signs", "Add a vitalSigns object with hr, bp, rr, temp, and spo2 values appropriate to the scenario."),
@@ -427,6 +469,8 @@ const patientCase = {{
         ("Log your reasoning", "Add console.log statements that output your priority intervention and why it comes first."),
         ("Self-check", "Review your case against the concept section. Can you defend every data point clinically?"),
     ]
+
+    steps = step_list
 
     steps_html = ""
     for i, (heading, body) in enumerate(steps, 1):
@@ -1159,8 +1203,13 @@ def main():
             gitkeep.write_text("", encoding="utf-8")
 
     (ROOT / "src" / "study").mkdir(parents=True, exist_ok=True)
+    for rel_path, content in STUDY_FILE_CONTENT.items():
+        out = ROOT / rel_path.replace("/", os.sep)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(content, encoding="utf-8")
+
     print(f"Generated NCLEX-RN project at {ROOT}")
-    print(f"Sessions: 40 | Modules: 10 | Index pages: 9")
+    print(f"Sessions: 40 | Modules: 10 | Hydrated: sessions 02–04")
 
 
 if __name__ == "__main__":
