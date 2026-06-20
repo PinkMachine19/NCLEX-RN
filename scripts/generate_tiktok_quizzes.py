@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Generate TikTok-style NCLEX quizzes — same format as sql-quiz."""
 
+import html
 import json
 import re
 import shutil
@@ -65,6 +66,31 @@ def watermark_block(uid="intro"):
     svg = WATERMARK_SVG_TEMPLATE.format(grad_id=grad_id)
     return f'<div class="watermark-wrap" aria-hidden="true">{svg}</div>'
 
+
+def cover_lines(quiz, lines_key, fallback_key):
+    raw = quiz.get(lines_key)
+    if raw:
+        return raw
+    text = quiz.get(fallback_key, "")
+    if " — " in text:
+        left, right = text.split(" — ", 1)
+        return [left.strip(), right.strip()]
+    return [text] if text else []
+
+
+def render_cover_block(lines, block_class):
+    inner = "".join(f'<span class="cover-line">{html.escape(line)}</span>' for line in lines)
+    return f'<div class="{block_class}">{inner}</div>'
+
+
+def render_intro_cover(quiz):
+    title_lines = cover_lines(quiz, "introTitleLines", "title")
+    tagline_lines = cover_lines(quiz, "introTaglineLines", "introTagline")
+    hook_lines = cover_lines(quiz, "introHookLines", "introHook")
+    return f"""{render_cover_block(title_lines, "cover-title")}
+          {render_cover_block(tagline_lines, "cover-tagline")}
+          <p class="intro-hook">{"".join(f'<span class="cover-line">{html.escape(line)}</span>' for line in hook_lines)}</p>"""
+
 QUIZZES = [
     {
         "quizNumber": 1,
@@ -74,6 +100,9 @@ QUIZZES = [
         "introTagline": "Think you know infection control?",
         "introHook": "Take a breath — answer before the timer ends.",
         "introBottom": "Scrub in smart",
+        "introTitleLines": ["NCLEX Quiz #1", "Standard Precautions"],
+        "introTaglineLines": ["Think you know", "infection control?"],
+        "introHookLines": ["Take a breath —", "answer before the timer ends."],
         "resultsHeadline": "How ready are you for NCLEX?",
         "resultsSub": "Module 1: Infection Control & Safety",
         "scoreTiers": [
@@ -149,6 +178,9 @@ QUIZZES = [
         "introTagline": "Know your isolation types?",
         "introHook": "Take a breath — answer before the timer ends.",
         "introBottom": "Isolate with confidence",
+        "introTitleLines": ["NCLEX Quiz #2", "Transmission-Based", "Precautions"],
+        "introTaglineLines": ["Know your", "isolation types?"],
+        "introHookLines": ["Take a breath —", "answer before the timer ends."],
         "resultsHeadline": "Transmission precautions score",
         "resultsSub": "Contact · Droplet · Airborne",
         "scoreTiers": [
@@ -224,6 +256,9 @@ QUIZZES = [
         "introTagline": "PPE sequence matters.",
         "introHook": "Take a breath — answer before the timer ends.",
         "introBottom": "Don and doff safely",
+        "introTitleLines": ["NCLEX Quiz #3", "PPE & Donning/Doffing"],
+        "introTaglineLines": ["PPE sequence", "matters."],
+        "introHookLines": ["Take a breath —", "answer before the timer ends."],
         "resultsHeadline": "PPE mastery check",
         "resultsSub": "Protect yourself first",
         "scoreTiers": [
@@ -299,6 +334,9 @@ QUIZZES = [
         "introTagline": "Module 1 gate — pass or repeat.",
         "introHook": "Take a breath — answer before the timer ends.",
         "introBottom": "Gate quiz time",
+        "introTitleLines": ["NCLEX Quiz #4", "Module 1 Gate", "Review"],
+        "introTaglineLines": ["Module 1 gate —", "pass or repeat."],
+        "introHookLines": ["Take a breath —", "answer before the timer ends."],
         "resultsHeadline": "Module 1 gate result",
         "resultsSub": "Need 4/5 to unlock Module 2",
         "scoreTiers": [
@@ -383,6 +421,9 @@ QUIZZES = [
         "introTagline": "Airway before everything else.",
         "introHook": "Take a breath — answer before the timer ends.",
         "introBottom": "Assess first",
+        "introTitleLines": ["NCLEX Quiz #5", "ABCs &", "Primary Survey"],
+        "introTaglineLines": ["Airway before", "everything else."],
+        "introHookLines": ["Take a breath —", "answer before the timer ends."],
         "resultsHeadline": "Primary survey score",
         "resultsSub": "Module 2: Emergency Response · Session 05",
         "scoreTiers": [
@@ -460,6 +501,9 @@ QUIZZES = [
         "introTagline": "Code blue basics — can you keep up?",
         "introHook": "Take a breath — answer before the timer ends.",
         "introBottom": "Push hard, push fast",
+        "introTitleLines": ["NCLEX Quiz #6", "Cardiac Arrest", "& BLS/ACLS"],
+        "introTaglineLines": ["Code blue basics —", "can you keep up?"],
+        "introHookLines": ["Take a breath —", "answer before the timer ends."],
         "resultsHeadline": "BLS / ACLS score",
         "resultsSub": "Module 2: Emergency Response · Session 06",
         "scoreTiers": [
@@ -669,9 +713,7 @@ def render_quiz(quiz, style, script):
       <div class="quiz-card">
         {watermark_block("intro")}
         <div class="slide-main">
-          <h1>{quiz['title']}</h1>
-          <div class="big">{quiz['introTagline']}</div>
-          <p class="intro-hook">{quiz['introHook']}</p>
+          {render_intro_cover(quiz)}
           <div class="intro-countdown" aria-live="polite">
             <span class="intro-countdown-text"></span>
           </div>
