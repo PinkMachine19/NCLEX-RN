@@ -763,7 +763,8 @@ a.back{{display:inline-block;margin-bottom:16px;color:#3a86ff;font-weight:600;fo
 </head>
 <body>
 <div class="content">
-  <a class="back" href="/nclex-rn/index.html">← Back to NCLEX-RN</a>
+  <a class="back" href="/nclex-rn/index.html">← NCLEX study site</a>
+  <a class="back" href="/nclex-rn-quizzes-index.html" style="margin-left:12px;">↑ Uploads root index</a>
   <h1>NCLEX TikTok Quizzes</h1>
   <p class="subtitle">{len(QUIZZES)} auto-play carousel quizzes · swipe · timer · ding</p>{body}
 </div>
@@ -797,13 +798,29 @@ def deploy_to_uploads():
     if not UPLOADS.is_dir():
         print(f"  skip deploy — uploads not found: {UPLOADS}")
         return
-    if UPLOADS_QUIZZES.exists():
-        shutil.rmtree(UPLOADS_QUIZZES)
-    shutil.copytree(OUT, UPLOADS_QUIZZES)
+
+    UPLOADS_QUIZZES.mkdir(parents=True, exist_ok=True)
+
+    for item in OUT.iterdir():
+        dest = UPLOADS_QUIZZES / item.name
+        if item.is_dir():
+            if dest.exists():
+                shutil.rmtree(dest)
+            shutil.copytree(item, dest)
+        else:
+            shutil.copy2(item, dest)
+
+    root_index = UPLOADS / "nclex-rn-quizzes-index.html"
+    shutil.copy2(OUT / "index.html", root_index)
+
     for q in QUIZZES:
         shutil.copy2(OUT / q["file"], UPLOADS / q["file"])
+
     print(f"  deployed quizzes -> {UPLOADS_QUIZZES}")
+    print(f"  quiz index     -> {UPLOADS_QUIZZES / 'index.html'}")
+    print(f"  root index     -> {root_index}")
     print(f"  browse: http://localhost:6970/nclex-rn-tik-tok-quizes/")
+    print(f"  browse: http://localhost:6970/nclex-rn-quizzes-index.html")
 
 
 if __name__ == "__main__":
