@@ -366,6 +366,83 @@ QUIZZES = [
             },
         ],
     },
+    {
+        "quizNumber": 5,
+        "sessionNumber": 5,
+        "moduleNum": 2,
+        "moduleName": "Emergency Response",
+        "file": "nclex-emergency-response-quiz-5.html",
+        "title": "NCLEX Quiz #5 — ABCs & Primary Survey",
+        "introTagline": "Airway before everything else.",
+        "introHook": "Take a breath — answer before the timer ends.",
+        "introBottom": "Assess first",
+        "resultsHeadline": "Primary survey score",
+        "resultsSub": "Module 2: Emergency Response · Session 05",
+        "scoreTiers": [
+            ("0–1", "Code Blue Confused"),
+            ("2–3", "Rapid Response Ready"),
+            ("4–5", "ABC Pro"),
+        ],
+        "hashtags": "#NCLEX #NCLEXRN #Nursing #EmergencyNursing #FutureRN",
+        "resultsBottom": "ABCs save lives",
+        "questions": [
+            {
+                "question": "During the primary survey, what is assessed FIRST?",
+                "choices": [
+                    "A) Circulation",
+                    "B) Airway",
+                    "C) Disability",
+                    "D) Exposure",
+                ],
+                "correct": "B",
+                "answer": "The primary survey follows ABCDE — Airway is always first because without a patent airway, breathing and circulation cannot be sustained.",
+            },
+            {
+                "question": "An unresponsive patient is found. After checking responsiveness and calling for help, the nurse's NEXT priority is:",
+                "choices": [
+                    "A) Start IV fluids",
+                    "B) Open the airway and assess breathing",
+                    "C) Complete the secondary survey",
+                    "D) Obtain consent from family",
+                ],
+                "correct": "B",
+                "answer": "After activating the emergency response, open the airway and assess breathing — do not delay ABCs for IV access or detailed assessment.",
+            },
+            {
+                "question": "A trauma patient has absent breath sounds on one side, tracheal deviation, and distended neck veins. Priority action?",
+                "choices": [
+                    "A) Order a chest X-ray and wait",
+                    "B) Prepare for needle decompression of tension pneumothorax",
+                    "C) Administer morphine for pain",
+                    "D) Place the patient in Trendelenburg position",
+                ],
+                "correct": "B",
+                "answer": "These are classic signs of tension pneumothorax — a life-threatening breathing problem requiring immediate decompression.",
+            },
+            {
+                "question": "The primary survey differs from the secondary survey because the primary survey:",
+                "choices": [
+                    "A) Is completed hours after arrival",
+                    "B) Identifies and treats life-threatening problems immediately",
+                    "C) Replaces all diagnostic testing",
+                    "D) Is performed only by physicians",
+                ],
+                "correct": "B",
+                "answer": "Primary survey finds what kills first. Secondary survey is a head-to-toe evaluation after immediate threats are addressed.",
+            },
+            {
+                "question": "Which finding requires IMMEDIATE airway intervention?",
+                "choices": [
+                    "A) SpO2 96% on room air",
+                    "B) Gurgling respirations with an ineffective cough",
+                    "C) Blood pressure 118/72 mmHg",
+                    "D) Small laceration on the forearm",
+                ],
+                "correct": "B",
+                "answer": "Gurgling with ineffective cough signals airway obstruction or inability to clear secretions — suction and airway support come first.",
+            },
+        ],
+    },
 ]
 
 
@@ -620,37 +697,48 @@ def build_question_bank():
         })
 
     bank = {
-        "title": "NCLEX-RN TikTok Question Bank — Module 1",
+        "title": "NCLEX-RN TikTok Question Bank",
         "totalQuestions": global_num - 1,
         "totalQuizzes": len(QUIZZES),
-        "module": "Infection Control & Safety",
+        "modules": sorted({q.get("moduleName", "Infection Control & Safety") for q in QUIZZES}),
         "quizzes": bank_quizzes,
     }
     master = {
         "name": "NCLEX-RN TikTok Quiz Master Index",
-        "module": "Infection Control & Safety",
         "totalQuestions": global_num - 1,
+        "totalQuizzes": len(QUIZZES),
         "quizzes": master_quizzes,
     }
     return bank, master
 
 
 def render_index():
-    rows = ""
+    sections = {}
     for q in QUIZZES:
-        rows += f"""
+        mod = q.get("moduleName") or "Infection Control & Safety"
+        sections.setdefault(mod, []).append(q)
+
+    body = ""
+    for mod_name, quizzes in sections.items():
+        rows = ""
+        for q in quizzes:
+            rows += f"""
       <a class="quiz-card" href="{q['file']}">
         <div class="quiz-num">Quiz {q['quizNumber']}</div>
         <div class="quiz-title">{q['title']}</div>
         <div class="quiz-meta">Session {q['sessionNumber']:02d} · 5 questions · auto-play</div>
       </a>"""
+        body += f"""
+  <h2 class="module-title">{mod_name}</h2>
+  <div class="grid">{rows}
+  </div>"""
 
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-<title>NCLEX Quizzes — Module 1</title>
+<title>NCLEX TikTok Quizzes</title>
 <style>
 *{{box-sizing:border-box;margin:0;padding:0;}}
 body{{
@@ -660,6 +748,7 @@ body{{
 .content{{max-width:640px;margin:0 auto;}}
 h1{{font-size:24px;font-weight:800;margin-bottom:4px;color:#fff;}}
 .subtitle{{color:#a8b5c8;font-size:15px;margin-bottom:20px;}}
+.module-title{{font-size:16px;font-weight:800;color:#7db7ff;margin:24px 0 12px;}}
 .grid{{display:flex;flex-direction:column;gap:10px;}}
 .quiz-card{{
   display:block;text-decoration:none;color:inherit;
@@ -675,10 +764,8 @@ a.back{{display:inline-block;margin-bottom:16px;color:#3a86ff;font-weight:600;fo
 <body>
 <div class="content">
   <a class="back" href="/nclex-rn/index.html">← Back to NCLEX-RN</a>
-  <h1>NCLEX Quizzes</h1>
-  <p class="subtitle">Module 1 — Infection Control &amp; Safety</p>
-  <div class="grid">{rows}
-  </div>
+  <h1>NCLEX TikTok Quizzes</h1>
+  <p class="subtitle">{len(QUIZZES)} auto-play carousel quizzes · swipe · timer · ding</p>{body}
 </div>
 </body>
 </html>
