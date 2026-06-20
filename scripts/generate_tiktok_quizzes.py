@@ -306,7 +306,14 @@ QUIZZES = [
             ("2–3", "Almost There"),
             ("4–5", "Module 2 Unlocked"),
         ],
-        "hashtags": "#NCLEX #NCLEXRN #Nursing #StudyNursing #FutureRN",
+        "hashtags": "#NCLEX #NCLEXRN #NursingStudent #StudyTok #FutureRN",
+        "tiktokDescription": (
+            "Module 1 gate review. That's hot.\n\n"
+            "Five questions. Infection control, safety, all the serious stuff. "
+            "You either pass or you do it again. So major.\n\n"
+            "Seven seconds per question. No pressure. Just, like, your whole Module 2 future.\n\n"
+            "Sliving through nursing school one quiz at a time. More section quizzes coming soon."
+        ),
         "resultsBottom": "Safety first, always",
         "questions": [
             {
@@ -604,6 +611,7 @@ def render_quiz(quiz, style, script):
 {score_rows}
         </div>
         <p class="results-cta">{quiz['resultsSub']}</p>
+        {f'<p class="results-description">{quiz["tiktokDescription"].replace(chr(10), "<br>")}</p>' if quiz.get("tiktokDescription") else ""}
         <p class="results-hashtags">{quiz['hashtags']}</p>
         </div>
       </div>
@@ -794,6 +802,19 @@ def main():
     deploy_to_uploads()
 
 
+def write_tiktok_txt(quiz):
+    """Paste-ready TikTok caption in uploads folder."""
+    desc = quiz.get("tiktokDescription")
+    if not desc:
+        return
+    stem = Path(quiz["file"]).stem
+    folder = UPLOADS / stem
+    folder.mkdir(parents=True, exist_ok=True)
+    body = f"{desc}\n\n{quiz['hashtags']}\n"
+    (folder / f"{stem}.txt").write_text(body, encoding="utf-8")
+    (UPLOADS / f"{stem}.txt").write_text(body, encoding="utf-8")
+
+
 def deploy_to_uploads():
     if not UPLOADS.is_dir():
         print(f"  skip deploy — uploads not found: {UPLOADS}")
@@ -815,6 +836,7 @@ def deploy_to_uploads():
 
     for q in QUIZZES:
         shutil.copy2(OUT / q["file"], UPLOADS / q["file"])
+        write_tiktok_txt(q)
 
     print(f"  deployed quizzes -> {UPLOADS_QUIZZES}")
     print(f"  quiz index     -> {UPLOADS_QUIZZES / 'index.html'}")
