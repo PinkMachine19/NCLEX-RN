@@ -23,6 +23,7 @@ TIKTOK_QUIZZES = [
     (3, 3, "nclex-infection-control-quiz-3.html", "NCLEX Quiz #3 — PPE & Donning/Doffing"),
     (4, 4, "nclex-infection-control-quiz-4.html", "NCLEX Quiz #4 — Module 1 Gate Review"),
     (5, 5, "nclex-emergency-response-quiz-5.html", "NCLEX Quiz #5 — ABCs & Primary Survey"),
+    (6, 6, "nclex-emergency-response-quiz-6.html", "NCLEX Quiz #6 — Cardiac Arrest & BLS/ACLS"),
 ]
 
 BRAND = "🩺 NCLEX-RN Prep"
@@ -670,7 +671,7 @@ def tiktok_quiz_section():
     <div class="nav-grid">
       <a class="nav-card" href="{TIKTOK_QUIZ_BASE}/index.html">
         <div class="nav-card-title">All Module 1 Quizzes</div>
-        <div class="nav-card-desc">5 quizzes · Module 1 &amp; 2 · auto-play carousel</div>
+        <div class="nav-card-desc">6 quizzes · Module 1 &amp; 2 · auto-play carousel</div>
       </a>{cards}
     </div>
 """

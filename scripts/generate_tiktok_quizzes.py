@@ -450,6 +450,90 @@ QUIZZES = [
             },
         ],
     },
+    {
+        "quizNumber": 6,
+        "sessionNumber": 6,
+        "moduleNum": 2,
+        "moduleName": "Emergency Response",
+        "file": "nclex-emergency-response-quiz-6.html",
+        "title": "NCLEX Quiz #6 — Cardiac Arrest & BLS/ACLS",
+        "introTagline": "Code blue basics — can you keep up?",
+        "introHook": "Take a breath — answer before the timer ends.",
+        "introBottom": "Push hard, push fast",
+        "resultsHeadline": "BLS / ACLS score",
+        "resultsSub": "Module 2: Emergency Response · Session 06",
+        "scoreTiers": [
+            ("0–1", "Compression Confused"),
+            ("2–3", "Code Team Ready"),
+            ("4–5", "Resuscitation Pro"),
+        ],
+        "hashtags": "#NCLEXRN #NursingSchool #BLS #CodeBlue #NurseTok",
+        "tiktokDescription": (
+            "Cardiac arrest. CPR. Defibrillation. The code blue material everyone "
+            "hopes they never need and the NCLEX asks about anyway.\n\n"
+            "Compression rate. 30 to 2. Shockable rhythms. Five questions. Seven seconds each. "
+            "Your wrists might hurt just thinking about it.\n\n"
+            "More section quizzes coming. Module 2 is not done with you yet."
+        ),
+        "resultsBottom": "High-quality CPR saves lives",
+        "questions": [
+            {
+                "question": "What is the correct compression-to-ventilation ratio for adult CPR with one rescuer?",
+                "choices": [
+                    "A) 15:2",
+                    "B) 30:2",
+                    "C) 5:1",
+                    "D) 30:1",
+                ],
+                "correct": "B",
+                "answer": "Adult one-rescuer BLS uses 30 compressions to 2 ventilations.",
+            },
+            {
+                "question": "A patient is unresponsive with no pulse. After calling for help, what is the IMMEDIATE priority?",
+                "choices": [
+                    "A) Insert IV access",
+                    "B) Start high-quality chest compressions",
+                    "C) Obtain a blood glucose level",
+                    "D) Listen to breath sounds for one full minute",
+                ],
+                "correct": "B",
+                "answer": "Start CPR immediately — do not delay compressions for IV access or extended assessment.",
+            },
+            {
+                "question": 'An AED displays "shock advised." What should the team do FIRST?',
+                "choices": [
+                    "A) Resume compressions without pausing",
+                    "B) Clear the patient and deliver the shock",
+                    "C) Wait for the physician to arrive",
+                    "D) Administer epinephrine before shocking",
+                ],
+                "correct": "B",
+                "answer": "Clear everyone from the patient before delivering a defibrillation shock — then resume compressions immediately after.",
+            },
+            {
+                "question": "High-quality CPR requires a compression rate of:",
+                "choices": [
+                    "A) 60–80 per minute",
+                    "B) 100–120 per minute",
+                    "C) 140–160 per minute",
+                    "D) 80–100 per minute",
+                ],
+                "correct": "B",
+                "answer": "AHA guidelines recommend 100–120 compressions per minute for adults.",
+            },
+            {
+                "question": "Which rhythm is shockable and requires defibrillation?",
+                "choices": [
+                    "A) Asystole",
+                    "B) Pulseless electrical activity (PEA)",
+                    "C) Ventricular fibrillation",
+                    "D) Sinus bradycardia with a pulse",
+                ],
+                "correct": "C",
+                "answer": "Ventricular fibrillation and pulseless ventricular tachycardia are shockable rhythms. Asystole and PEA are not.",
+            },
+        ],
+    },
 ]
 
 
