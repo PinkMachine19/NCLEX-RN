@@ -379,9 +379,14 @@ def get_session_info(session_num):
 
 
 def session_status(session_num):
-    if session_num == 1:
-        return "badge-current", "Available"
-    if session_num <= 4:
+    mod, sess = get_session_info(session_num)
+    if not mod:
+        return "badge-locked", "Locked"
+    num = sess[0]
+    is_gate = num == mod["sessions"][-1][0]
+    if mod["num"] <= 2:
+        if is_gate:
+            return "badge-gate", "Gate"
         return "badge-current", "Available"
     return "badge-locked", "Locked"
 
@@ -638,23 +643,22 @@ git commit -m "session-{num:02d}: {title.lower()} — study session complete"</c
 
 def generate_index():
     rows = ""
-    module_cards = ""
+    module_start_sections = ""
     for mod in MODULES:
         gate_session = mod["sessions"][-1][0]
         prev_gate = mod["sessions"][0][0] - 1
         unlock = "None — starting point" if mod["num"] == 1 else f"Session {prev_gate:02d} quiz ≥ 80%"
-        status = "Active" if mod["num"] == 1 else "Locked"
-        badge = "badge-current" if mod["num"] == 1 else "badge-locked"
+        status = "Active" if mod["num"] <= 2 else "Locked"
+        badge = "badge-current" if mod["num"] <= 2 else "badge-locked"
         s_start = mod["sessions"][0][0]
         s_end = mod["sessions"][-1][0]
         first_session = mod["sessions"][0]
         first_href = f"sessions/session-{first_session[0]:02d}/index.html"
-        if mod["num"] == 1:
+        if mod["num"] <= 2:
             topic_cell = f'<a href="{first_href}"><strong>{mod["name"]}</strong></a>'
-            sessions_cell = f'<a href="sessions/index.html#module-{mod["num"]}">{s_start:02d} – {s_end:02d}</a>'
         else:
             topic_cell = f'<a href="sessions/index.html#module-{mod["num"]}">{mod["name"]}</a>'
-            sessions_cell = f'<a href="sessions/index.html#module-{mod["num"]}">{s_start:02d} – {s_end:02d}</a>'
+        sessions_cell = f'<a href="sessions/index.html#module-{mod["num"]}">{s_start:02d} – {s_end:02d}</a>'
         rows += f"""
           <tr>
             <td><span class="badge badge-layer">{mod['num']}</span></td>
@@ -663,13 +667,20 @@ def generate_index():
             <td><span class="badge {badge}">{status}</span></td>
             <td>{unlock}</td>
           </tr>"""
-        if mod["num"] == 1:
+        if mod["num"] <= 2:
+            cards = ""
             for num, title, _, _ in mod["sessions"]:
-                module_cards += f"""
+                cards += f"""
       <a class="nav-card" href="sessions/session-{num:02d}/index.html">
         <div class="nav-card-title">Session {num:02d}</div>
         <div class="nav-card-desc">{title}</div>
       </a>"""
+            module_start_sections += f"""
+    <h2>Module {mod['num']} — {mod['name']}</h2>
+    <p class="subtitle" style="margin-top:-20px;margin-bottom:16px;">Tap a session to open the full lesson.</p>
+    <div class="nav-grid">{cards}
+    </div>
+"""
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -716,10 +727,8 @@ def generate_index():
       &nbsp;·&nbsp; Module 1: Infection Control &amp; Safety
     </div>
 
-    <h2>Module 1 — Start Here</h2>
-    <p class="subtitle" style="margin-top:-20px;margin-bottom:16px;">Tap a session to open the full lesson (pre-quiz, concepts, study lab, post-quiz).</p>
-    <div class="nav-grid">{module_cards}
-    </div>
+    <h2>Start Here — Active Modules</h2>
+    {module_start_sections}
 
     <h2>Documentation Sections</h2>
     <div class="nav-grid">
@@ -842,32 +851,46 @@ def generate_syllabus():
 
 
 def generate_sessions_index():
-    mod1_rows = ""
-    for num, title, _, _ in MODULES[0]["sessions"]:
-        is_gate = num == 4
-        badge = "badge-gate" if is_gate else "badge-current"
-        label = "Gate" if is_gate else "Available"
-        mod1_rows += f"""
+    def module_table(mod, full_columns=False):
+        rows = ""
+        for num, title, _, _ in mod["sessions"]:
+            is_gate = num == mod["sessions"][-1][0]
+            if mod["num"] <= 2:
+                badge = "badge-gate" if is_gate else "badge-current"
+                label = "Gate" if is_gate else "Available"
+            else:
+                badge = "badge-locked"
+                label = "Locked"
+            extra = "<td>—</td><td>—</td><td>—</td>" if full_columns else ""
+            rows += f"""
           <tr>
             <td><a href="session-{num:02d}/index.html">{num:02d}</a></td>
             <td><a href="session-{num:02d}/index.html">{title}</a></td>
-            <td><span class="badge {badge}">{label}</span></td>
-            <td>—</td><td>—</td><td>—</td>
+            <td><span class="badge {badge}">{label}</span></td>{extra}
           </tr>"""
+        if full_columns:
+            thead = "<thead><tr><th>#</th><th>Title</th><th>Status</th><th>Pre-Quiz</th><th>Post-Quiz</th><th>Committed</th></tr></thead>"
+        else:
+            thead = "<thead><tr><th>#</th><th>Title</th><th>Status</th></tr></thead>"
+        return f"""
+    <h2 id="module-{mod['num']}">Module {mod['num']} — {mod['name']}</h2>
+    <div class="table-wrap">
+      <table>
+        {thead}
+        <tbody>{rows}
+        </tbody>
+      </table>
+    </div>"""
+
+    active_modules = ""
+    for mod in MODULES[:2]:
+        active_modules += module_table(mod, full_columns=(mod["num"] <= 2))
 
     locked_modules = ""
-    for mod in MODULES[1:]:
+    for mod in MODULES[2:]:
         locked_modules += f"""
-    <h2 id="module-{mod['num']}">Module {mod['num']} — {mod['name']}</h2>
-    <div class="alert alert-warning">Locked until Module {mod['num']-1} gate quiz ≥ 80%</div>
-    <div class="table-wrap"><table><thead><tr><th>#</th><th>Title</th><th>Status</th></tr></thead><tbody>"""
-        for num, title, _, _ in mod["sessions"]:
-            locked_modules += (
-                f'<tr><td><a href="session-{num:02d}/index.html">{num:02d}</a></td>'
-                f'<td><a href="session-{num:02d}/index.html">{title}</a></td>'
-                f'<td><span class="badge badge-locked">Locked</span></td></tr>'
-            )
-        locked_modules += "</tbody></table></div>"
+    <div class="alert alert-warning">Locked until Module {mod['num']-1} gate quiz ≥ 80%</div>"""
+        locked_modules += module_table(mod, full_columns=False)
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -881,15 +904,8 @@ def generate_sessions_index():
 <main><div class="container">
     <h1>Sessions</h1>
     <p class="subtitle">One session doc per lesson. Pre-quiz, study session, commit checkpoint, post-quiz.</p>
-    <div class="alert alert-info"><strong>Sessions 01–04 are available.</strong> Complete Session 04 gate to unlock Module 2.</div>
-    <h2 id="module-1">Module 1 — Infection Control &amp; Safety</h2>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>#</th><th>Title</th><th>Status</th><th>Pre-Quiz</th><th>Post-Quiz</th><th>Committed</th></tr></thead>
-        <tbody>{mod1_rows}
-        </tbody>
-      </table>
-    </div>
+    <div class="alert alert-info"><strong>Sessions 01–08 are available.</strong> Module 1 (01–04) and Module 2 (05–08).</div>
+    {active_modules}
     {locked_modules}
     <p style="color:var(--text-muted);font-size:14px;">Full session list in <a href="../syllabus/index.html">Syllabus</a>.</p>
 </div></main>
@@ -931,8 +947,8 @@ def generate_labs_index():
             lab_file = "src/patient-case.js" if num == 1 else f"src/study/module-{mod['num']:02d}-session-{num:02d}.js"
             link = f'<a href="../sessions/session-{num:02d}/index.html">{num:02d}</a>'
             milestone_link = f'<a href="../sessions/session-{num:02d}/index.html">{milestone}</a>'
-            status = "badge-current" if mod["num"] == 1 else "badge-locked"
-            label = "Available" if mod["num"] == 1 else "Locked"
+            status = "badge-current" if mod["num"] <= 2 else "badge-locked"
+            label = "Available" if mod["num"] <= 2 else "Locked"
             rows += f'<tr><td>{link}</td><td>{milestone_link}</td><td><code>{lab_file}</code></td><td><span class="badge {status}">{label}</span></td></tr>'
     return f"""<!DOCTYPE html>
 <html lang="en">
