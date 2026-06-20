@@ -3,10 +3,13 @@
 
 import json
 import re
+import shutil
 from pathlib import Path
 
 ROOT = Path(r"D:\repos\source\NCLEX-RN")
 OUT = ROOT / "tik-tok quizes"
+UPLOADS = Path(r"D:\apps\uploads")
+UPLOADS_QUIZZES = UPLOADS / "nclex-rn-tik-tok-quizes"
 TEMPLATE = Path(r"D:\repos\source\sql-quiz\sql-fundamentals-quiz-4.html")
 THEME_CSS = Path(__file__).parent / "nclex_tiktok_theme.css"
 
@@ -671,7 +674,7 @@ a.back{{display:inline-block;margin-bottom:16px;color:#3a86ff;font-weight:600;fo
 </head>
 <body>
 <div class="content">
-  <a class="back" href="../docs/index.html">← Back</a>
+  <a class="back" href="/nclex-rn/index.html">← Back to NCLEX-RN</a>
   <h1>NCLEX Quizzes</h1>
   <p class="subtitle">Module 1 — Infection Control &amp; Safety</p>
   <div class="grid">{rows}
@@ -700,6 +703,20 @@ def main():
     )
     (OUT / "index.html").write_text(render_index(), encoding="utf-8")
     print(f"Generated {len(QUIZZES)} TikTok quizzes in {OUT}")
+    deploy_to_uploads()
+
+
+def deploy_to_uploads():
+    if not UPLOADS.is_dir():
+        print(f"  skip deploy — uploads not found: {UPLOADS}")
+        return
+    if UPLOADS_QUIZZES.exists():
+        shutil.rmtree(UPLOADS_QUIZZES)
+    shutil.copytree(OUT, UPLOADS_QUIZZES)
+    for q in QUIZZES:
+        shutil.copy2(OUT / q["file"], UPLOADS / q["file"])
+    print(f"  deployed quizzes -> {UPLOADS_QUIZZES}")
+    print(f"  browse: http://localhost:6970/nclex-rn-tik-tok-quizes/")
 
 
 if __name__ == "__main__":

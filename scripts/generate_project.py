@@ -2,6 +2,7 @@
 """Generate NCLEX-RN project docs — mirrors react-learn-with-ai architecture."""
 
 import os
+import shutil
 import sys
 from pathlib import Path
 
@@ -11,6 +12,17 @@ if str(_SCRIPTS) not in sys.path:
 from hydrated_module1 import HYDRATED_CONCEPT, HYDRATED_STEPS, STUDY_FILE_CONTENT
 
 ROOT = Path(r"D:\repos\source\NCLEX-RN")
+UPLOADS = Path(r"D:\apps\uploads")
+UPLOADS_SITE = UPLOADS / "nclex-rn"
+TIKTOK_QUIZ_BASE = "/nclex-rn-tik-tok-quizes"
+
+# TikTok auto-play quizzes (Module 1) — HTML lives in uploads, not in git
+TIKTOK_QUIZZES = [
+    (1, 1, "nclex-infection-control-quiz-1.html", "NCLEX Quiz #1 — Standard Precautions"),
+    (2, 2, "nclex-infection-control-quiz-2.html", "NCLEX Quiz #2 — Transmission-Based Precautions"),
+    (3, 3, "nclex-infection-control-quiz-3.html", "NCLEX Quiz #3 — PPE & Donning/Doffing"),
+    (4, 4, "nclex-infection-control-quiz-4.html", "NCLEX Quiz #4 — Module 1 Gate Review"),
+]
 
 BRAND = "🩺 NCLEX-RN Prep"
 TITLE = "NCLEX-RN Exam Preparation Platform"
@@ -639,6 +651,30 @@ git commit -m "session-{num:02d}: {title.lower()} — study session complete"</c
     return html
 
 
+def tiktok_quiz_section():
+    cards = ""
+    for num, session, file, title in TIKTOK_QUIZZES:
+        href = f"{TIKTOK_QUIZ_BASE}/{file}"
+        cards += f"""
+      <a class="nav-card" href="{href}">
+        <div class="nav-card-title">TikTok Quiz {num}</div>
+        <div class="nav-card-desc">{title} · Session {session:02d} · 5 Q · auto-play</div>
+      </a>"""
+    return f"""
+    <h2>TikTok Auto-Play Quizzes</h2>
+    <p class="subtitle" style="margin-top:-8px;margin-bottom:16px;">
+      Swipe-style 9:16 quizzes with timer and ding — same format as SQL quizzes.
+      Open on local server: <a href="{TIKTOK_QUIZ_BASE}/index.html">localhost:6970{TIKTOK_QUIZ_BASE}/</a>
+    </p>
+    <div class="nav-grid">
+      <a class="nav-card" href="{TIKTOK_QUIZ_BASE}/index.html">
+        <div class="nav-card-title">All Module 1 Quizzes</div>
+        <div class="nav-card-desc">4 quizzes · 20 questions · Infection Control &amp; Safety</div>
+      </a>{cards}
+    </div>
+"""
+
+
 def generate_index():
     rows = ""
     module_start_sections = ""
@@ -711,6 +747,8 @@ def generate_index():
       <strong>Start anywhere:</strong> All modules and sessions are open.
       <a href="sessions/session-01/index.html">Session 01</a> is a good starting point if you are new.
     </div>
+
+    {tiktok_quiz_section()}
 
     <h2>All Modules — Sessions</h2>
     {module_start_sections}
@@ -1213,6 +1251,19 @@ def main():
 
     print(f"Generated NCLEX-RN project at {ROOT}")
     print(f"Sessions: 40 | Modules: 10 | Hydrated: sessions 02–04")
+    deploy_to_uploads(docs)
+
+
+def deploy_to_uploads(docs: Path):
+    """Copy docs to IIS uploads so TikTok quiz links resolve on localhost:6970."""
+    if not UPLOADS.is_dir():
+        print(f"  skip deploy — uploads folder not found: {UPLOADS}")
+        return
+    if UPLOADS_SITE.exists():
+        shutil.rmtree(UPLOADS_SITE)
+    shutil.copytree(docs, UPLOADS_SITE)
+    print(f"  deployed site -> {UPLOADS_SITE}")
+    print(f"  browse: http://localhost:6970/nclex-rn/")
 
 
 if __name__ == "__main__":
