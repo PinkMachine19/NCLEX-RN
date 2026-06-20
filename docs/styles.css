@@ -119,11 +119,17 @@ p {
 
 a {
   color: var(--accent);
-  text-decoration: none;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 a:hover {
-  text-decoration: underline;
+  filter: brightness(1.12);
+}
+
+table a,
+td a {
+  font-weight: 600;
 }
 
 ul, ol {
@@ -187,6 +193,7 @@ li {
   font-size: 14px;
   color: var(--accent);
   margin-bottom: 4px;
+  text-decoration: underline;
 }
 
 .nav-card-desc {

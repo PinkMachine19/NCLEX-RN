@@ -638,6 +638,7 @@ git commit -m "session-{num:02d}: {title.lower()} — study session complete"</c
 
 def generate_index():
     rows = ""
+    module_cards = ""
     for mod in MODULES:
         gate_session = mod["sessions"][-1][0]
         prev_gate = mod["sessions"][0][0] - 1
@@ -646,14 +647,29 @@ def generate_index():
         badge = "badge-current" if mod["num"] == 1 else "badge-locked"
         s_start = mod["sessions"][0][0]
         s_end = mod["sessions"][-1][0]
+        first_session = mod["sessions"][0]
+        first_href = f"sessions/session-{first_session[0]:02d}/index.html"
+        if mod["num"] == 1:
+            topic_cell = f'<a href="{first_href}"><strong>{mod["name"]}</strong></a>'
+            sessions_cell = f'<a href="sessions/index.html#module-{mod["num"]}">{s_start:02d} – {s_end:02d}</a>'
+        else:
+            topic_cell = f'<a href="sessions/index.html#module-{mod["num"]}">{mod["name"]}</a>'
+            sessions_cell = f'<a href="sessions/index.html#module-{mod["num"]}">{s_start:02d} – {s_end:02d}</a>'
         rows += f"""
           <tr>
             <td><span class="badge badge-layer">{mod['num']}</span></td>
-            <td>{mod['name']}</td>
-            <td>{s_start:02d} – {s_end:02d}</td>
+            <td>{topic_cell}</td>
+            <td>{sessions_cell}</td>
             <td><span class="badge {badge}">{status}</span></td>
             <td>{unlock}</td>
           </tr>"""
+        if mod["num"] == 1:
+            for num, title, _, _ in mod["sessions"]:
+                module_cards += f"""
+      <a class="nav-card" href="sessions/session-{num:02d}/index.html">
+        <div class="nav-card-title">Session {num:02d}</div>
+        <div class="nav-card-desc">{title}</div>
+      </a>"""
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -698,6 +714,11 @@ def generate_index():
       <strong>Active session:</strong>
       <a href="sessions/session-01/index.html">Session 01 — Standard Precautions &amp; Hand Hygiene</a>
       &nbsp;·&nbsp; Module 1: Infection Control &amp; Safety
+    </div>
+
+    <h2>Module 1 — Start Here</h2>
+    <p class="subtitle" style="margin-top:-20px;margin-bottom:16px;">Tap a session to open the full lesson (pre-quiz, concepts, study lab, post-quiz).</p>
+    <div class="nav-grid">{module_cards}
     </div>
 
     <h2>Documentation Sections</h2>
@@ -829,7 +850,7 @@ def generate_sessions_index():
         mod1_rows += f"""
           <tr>
             <td><a href="session-{num:02d}/index.html">{num:02d}</a></td>
-            <td>{title}</td>
+            <td><a href="session-{num:02d}/index.html">{title}</a></td>
             <td><span class="badge {badge}">{label}</span></td>
             <td>—</td><td>—</td><td>—</td>
           </tr>"""
@@ -837,11 +858,15 @@ def generate_sessions_index():
     locked_modules = ""
     for mod in MODULES[1:]:
         locked_modules += f"""
-    <h2>Module {mod['num']} — {mod['name']}</h2>
+    <h2 id="module-{mod['num']}">Module {mod['num']} — {mod['name']}</h2>
     <div class="alert alert-warning">Locked until Module {mod['num']-1} gate quiz ≥ 80%</div>
     <div class="table-wrap"><table><thead><tr><th>#</th><th>Title</th><th>Status</th></tr></thead><tbody>"""
         for num, title, _, _ in mod["sessions"]:
-            locked_modules += f'<tr><td>{num:02d}</td><td>{title}</td><td><span class="badge badge-locked">Locked</span></td></tr>'
+            locked_modules += (
+                f'<tr><td><a href="session-{num:02d}/index.html">{num:02d}</a></td>'
+                f'<td><a href="session-{num:02d}/index.html">{title}</a></td>'
+                f'<td><span class="badge badge-locked">Locked</span></td></tr>'
+            )
         locked_modules += "</tbody></table></div>"
 
     return f"""<!DOCTYPE html>
@@ -857,7 +882,7 @@ def generate_sessions_index():
     <h1>Sessions</h1>
     <p class="subtitle">One session doc per lesson. Pre-quiz, study session, commit checkpoint, post-quiz.</p>
     <div class="alert alert-info"><strong>Sessions 01–04 are available.</strong> Complete Session 04 gate to unlock Module 2.</div>
-    <h2>Module 1 — Infection Control &amp; Safety</h2>
+    <h2 id="module-1">Module 1 — Infection Control &amp; Safety</h2>
     <div class="table-wrap">
       <table>
         <thead><tr><th>#</th><th>Title</th><th>Status</th><th>Pre-Quiz</th><th>Post-Quiz</th><th>Committed</th></tr></thead>
@@ -877,8 +902,9 @@ def generate_quizzes_index():
     rows = ""
     for mod in MODULES:
         for num, title, _, _ in mod["sessions"]:
-            link = f'<a href="../sessions/session-{num:02d}/index.html">{num:02d}</a>' if mod["num"] == 1 else f"{num:02d}"
-            rows += f'<tr><td>{link}</td><td>{title}</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>'
+            link = f'<a href="../sessions/session-{num:02d}/index.html">{num:02d}</a>'
+            title_cell = f'<a href="../sessions/session-{num:02d}/index.html">{title}</a>'
+            rows += f'<tr><td>{link}</td><td>{title_cell}</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>'
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -903,10 +929,11 @@ def generate_labs_index():
     for mod in MODULES:
         for num, title, _, milestone in mod["sessions"]:
             lab_file = "src/patient-case.js" if num == 1 else f"src/study/module-{mod['num']:02d}-session-{num:02d}.js"
-            status = "badge-current" if num == 1 else "badge-locked"
-            label = "Current" if num == 1 else "Locked"
-            link = f'<a href="../sessions/session-{num:02d}/index.html">{num:02d}</a>' if mod["num"] == 1 else f"{num:02d}"
-            rows += f'<tr><td>{link}</td><td>{milestone}</td><td><code>{lab_file}</code></td><td><span class="badge {status}">{label}</span></td></tr>'
+            link = f'<a href="../sessions/session-{num:02d}/index.html">{num:02d}</a>'
+            milestone_link = f'<a href="../sessions/session-{num:02d}/index.html">{milestone}</a>'
+            status = "badge-current" if mod["num"] == 1 else "badge-locked"
+            label = "Available" if mod["num"] == 1 else "Locked"
+            rows += f'<tr><td>{link}</td><td>{milestone_link}</td><td><code>{lab_file}</code></td><td><span class="badge {status}">{label}</span></td></tr>'
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
